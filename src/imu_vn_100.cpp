@@ -15,6 +15,8 @@
  */
 
 #include <imu_vn_100/imu_vn_100.h>
+#include <imu_vn_100/imu_vn_100.h>
+#include <tf/transform_datatypes.h>
 
 namespace imu_vn_100 {
 
@@ -268,6 +270,21 @@ void ImuVn100::PublishData(const VnDeviceCompositeData& data) {
   imu_msg.header.frame_id = frame_id_;
 
   FillImuMessage(imu_msg, data, binary_output_);
+  
+  // NED TO ENU
+  tf::Quaternion data_quaternion;
+  tf::quaternionMsgToTF(imu_msg.orientation, data_quaternion);
+            
+  tf::Vector3 imu_axis = data_quaternion.getAxis();
+  double temp_x = imu_axis.getX();
+  imu_axis.setX(imu_axis.getY());
+  imu_axis.setY(temp_x);
+  imu_axis.setZ(-imu_axis.getZ());
+  tf::Quaternion imu_quaternion(imu_axis, data_quaternion.getAngle());
+    
+  tf::quaternionTFToMsg(imu_quaternion, imu_msg.orientation);
+  //
+
   pd_imu_.Publish(imu_msg);
 
   if (enable_mag_) {
