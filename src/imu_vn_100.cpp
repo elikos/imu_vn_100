@@ -15,7 +15,6 @@
  */
 
 #include <imu_vn_100/imu_vn_100.h>
-#include <imu_vn_100/imu_vn_100.h>
 #include <tf/transform_datatypes.h>
 
 namespace imu_vn_100 {
