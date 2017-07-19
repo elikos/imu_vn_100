@@ -198,13 +198,13 @@ void ImuVn100::Initialize() {
           true));
     }
   }
-  VnEnsure(vn100_setVpeControl(
+  /*VnEnsure(vn100_setVpeControl(
 	&imu_, 
 	1, 
 	2, 
 	1, 
 	1, 
-	true));
+	true));*/
 
   CreateDiagnosedPublishers();
 
@@ -276,9 +276,9 @@ void ImuVn100::PublishData(const VnDeviceCompositeData& data) {
   tf::quaternionMsgToTF(imu_msg.orientation, data_quaternion);
             
   tf::Vector3 imu_axis = data_quaternion.getAxis();
-  double temp_x = imu_axis.getX();
-  imu_axis.setX(imu_axis.getY());
-  imu_axis.setY(temp_x);
+  //double temp_x = imu_axis.getX();
+  imu_axis.setX(imu_axis.getX());
+  imu_axis.setY(-imu_axis.getY());
   imu_axis.setZ(-imu_axis.getZ());
   tf::Quaternion imu_quaternion(imu_axis, data_quaternion.getAngle());
     
