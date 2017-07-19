@@ -196,6 +196,13 @@ void ImuVn100::Initialize() {
           true));
     }
   }
+  VnEnsure(vn100_setVpeControl(
+	&imu_, 
+	1, 
+	2, 
+	1, 
+	1, 
+	true));
 
   CreateDiagnosedPublishers();
 
